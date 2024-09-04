@@ -1,1 +1,28 @@
-/* You can add global styles to this file, and also import other style files */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+ font-size: 62.5%;
+}
+
+main {
+  max-width: 100vw;
+}
+
+nav {
+  display: flex;
+  gap: 1rem;
+
+  font-size: 2rem;
+  margin-bottom: 8rem;
+}
+
+.content {
+  display: flex;
+
+  text-align: center;
+  justify-content: center;
+}
