@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
-import { CardService } from '../card.service';
-import {PerksService} from "../perks.service";
+import { CardService } from '../card/card.service';
+import {PerksService} from "../perk/perks.service";
 import { Card } from '../models/card.model';
 import {Perk} from "../models/perk.model";
 import { FormsModule } from '@angular/forms';

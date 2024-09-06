@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {HomeComponent} from "../home/home.component";
 import {FormsModule} from "@angular/forms";
 import {CommonModule, NgOptimizedImage} from "@angular/common";
-import {CardService} from "../card.service";
+import {CardService} from "./card.service";
 import {RouterLink} from "@angular/router";
 import {Card} from "../models/card.model";
 import {CardAddComponent} from "../card-add/card-add.component";
