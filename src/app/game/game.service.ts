@@ -1,59 +1,70 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import Echo from 'laravel-echo';
+import Pusher from 'pusher-js';
 
-import { Card } from '../models/card.model';
-import { Game } from '../models/game.model';
-import {Player} from "../models/player.model";
+import {Player} from '../models/player.model';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class GameService {
-  private cardsUrl = 'http://localhost:8000/api/cards'
-
-  private game: Game = new Game()
+  private cardsUrl = 'http://localhost:8000/api/cards';
+  private gameUrl = 'http://localhost:8000/api/game';
+  private csrfToken: string | undefined;
+  private echo: Echo;
 
   constructor(private http: HttpClient) {
-  }
-
-  initializeDeck(): Observable<Card[]> {
-    return this.http.get<Card[]>(this.cardsUrl);
-  }
-
-  dealCards(deck: Card[], numPlayers: number): Map<number, Card[]> {
-    const playerHands = new Map<number, Card[]>();
-
-    for (let i = 0; i < numPlayers; i++) {
-      playerHands.set(i, []);
-    }
-
-    for (let i = 0; i < numPlayers * 2; i++) {
-      const randomIndex = Math.floor(Math.random() * deck.length);
-      const selectedCard = deck[randomIndex];
-      const playerIndex = i % numPlayers;
-      playerHands.get(playerIndex)!.push(selectedCard);
-    }
-
-    return playerHands;
-  }
-
-  startGame(players: Player[]): Observable<void> {
-    return new Observable(observer => {
-      this.initializeDeck().subscribe(deck => {
-        this.game.initialize(players, deck);
-        observer.next();
-        observer.complete();
-      });
+    this.getCsrfToken().subscribe(() => {
+      this.csrfToken = this.getCookie('XSRF-TOKEN');
+    });
+    this.echo = new Echo({
+      broadcaster: 'pusher',
+      key: '513fb8d8b51e5195496f',
+      cluster: 'sa1',
+      forceTLS: true,
     });
   }
 
-  getCurrentPlayer(): Player {
-    return this.game.getCurrentPlayer();
+  private getCsrfToken(): Observable<void> {
+    return this.http.get<void>('http://localhost:8000/sanctum/csrf-cookie', {withCredentials: true});
   }
 
-  nextTurn(): void {
-    this.game.nextTurn();
+  private getCookie(name: string): string | undefined {
+    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    return match ? decodeURIComponent(match[2]) : undefined;
+  }
+
+  private getHttpOptions(): { headers: HttpHeaders} {
+    const headers = new HttpHeaders({
+      'X-CSRF-TOKEN': this.csrfToken || 'f'
+    });
+    return { headers };
+  }
+
+  listenToPlayers(gameId: string | null, onPlayerJoined: (player: Player) => void) {
+    if(gameId) {
+      this.echo.channel(`game.${gameId}`).listen('PlayerJoined', (event: any) => {
+        console.log('New Player Joined:', event.player);
+        onPlayerJoined(event.player);
+      })
+    }
+  }
+
+  createGame() {
+    return this.http.post(`${this.gameUrl}/create`,'');
+  }
+
+  addPlayer(nickname: string, game_id: string | null): Observable<Player> {
+    const body = { name: nickname,
+                   game_id: game_id};
+    return this.http.post<Player>(`${this.gameUrl}/join`, body, this.getHttpOptions());
+  }
+
+  getPlayers(game_id: string | null): Observable<Player[]> {
+    const params = { game_id: game_id || ''};
+    return this.http.get<Player[]>(`${this.gameUrl}/players`, {params});
   }
 }

@@ -9,7 +9,7 @@ import {CardEditComponent} from "./card-edit/card-edit.component";
 
 export const routes: Routes = [
   { path: '', component: HomeComponent},
-  { path: 'game', component: GameComponent},
+  { path: 'game/join/:game_id', component: GameComponent},
   { path: 'cards', component: CardComponent },
   { path: 'add-card', component: CardAddComponent },
   { path: 'cards/:id', component: CardEditComponent },

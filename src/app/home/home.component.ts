@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import {RouterLink, RouterLinkActive} from "@angular/router";
+import {Router, RouterLink, RouterLinkActive} from "@angular/router";
+import { GameService } from "../game/game.service";
 
 @Component({
   selector: 'app-home',
@@ -13,4 +14,11 @@ import {RouterLink, RouterLinkActive} from "@angular/router";
 })
 export class HomeComponent {
 
+  constructor(
+      private gameService: GameService,
+      private router: Router,
+  ) {}
+  createGame() {
+    this.gameService.createGame().subscribe((url) => this.router.navigate([`/game/join/${url}`]));
+  }
 }

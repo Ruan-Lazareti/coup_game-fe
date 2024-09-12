@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from "@angular/router";
+import {FormsModule} from "@angular/forms";
+import {CommonModule} from "@angular/common";
+
 import { GameService } from "./game.service";
 import { Player } from "../models/player.model"
 import { Card } from "../models/card.model";
@@ -8,37 +12,46 @@ import { Game } from "../models/game.model";
   selector: 'app-game',
   templateUrl: './game.component.html',
   standalone: true,
+  imports: [
+    FormsModule,
+      CommonModule,
+  ],
   styleUrl: './game.component.css'
 })
 
 export class GameComponent implements OnInit {
   game: Game | undefined;
+  players: Player[] = [];
+  nickname: string = '';
+  gameId: string | null = '';
 
-  playerHands: Map<number, Card[]> | undefined;
-  currentPlayer: Player | undefined;
-
-  constructor(private gameService: GameService) {
-  }
+  constructor(
+      private gameService: GameService,
+      private route: ActivatedRoute,
+  ) {}
 
   ngOnInit() {
-    this.gameService.initializeDeck().subscribe(deck => {
-      const players = Array.from({ length: 2 }, (_, i) => new Player(i, `Player ${i + 1}`)); //mudar qtde de player
-      this.playerHands = this.gameService.dealCards(deck, 1); //mudar qtde de player
+    this.gameId = this.route.snapshot.paramMap.get('game_id');
+    this.loadPlayers();
 
-      players.forEach(player => {
-        const cards = this.playerHands?.get(player.id);
-        player.hand = cards ? cards : [];
-        console.log(`Player ${player.name} cards:`, player.hand);
-      })
-
-      this.gameService.startGame(players).subscribe(() => {
-        console.log('Game Started!')
+    if (this.gameId) {
+      this.gameService.listenToPlayers(this.gameId, (newPlayer: Player) => {
+        this.players.push(newPlayer);
       });
-    })
+    }
   }
 
-  nextTurn() {
-    this.gameService.nextTurn();
-    this.currentPlayer = this.gameService.getCurrentPlayer();
+  loadPlayers() {
+    this.gameService.getPlayers(this.gameId).subscribe((players: Player[]) => {
+      this.players = players
+      console.log(players);
+    });
+  }
+
+  addPlayer() {
+    this.gameService.addPlayer(this.nickname, this.gameId).subscribe((newPlayer: Player) => {
+      this.players.push(newPlayer);
+      this.nickname = 'Test';
+    });
   }
 }
