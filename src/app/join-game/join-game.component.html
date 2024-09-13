@@ -1,0 +1,11 @@
+<div>
+	<h2>Entre no jogo</h2>
+	<input [(ngModel)]="nickname" placeholder="Digite seu nick">
+	<button (click)="addPlayer()">Entrar</button>
+
+	<h3>Jogadores Conectados:</h3>
+	<ul>
+		<li *ngFor="let player of players">{{player.name}}</li>
+	</ul>
+	<button (click)="startGame()" >Começar Jogo</button>
+</div>

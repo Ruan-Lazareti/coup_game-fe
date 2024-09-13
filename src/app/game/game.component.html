@@ -1,11 +1,28 @@
-<div>
-	<h2>Entre no jogo</h2>
-	<input [(ngModel)]="nickname" placeholder="Digite seu nick">
-	<button (click)="addPlayer()">Entrar</button>
+<div class="container" style="width: 100vw; height: 100vh;">
+	<div class="row justify-content-start">
+		<div class="col-3">
+			<h3>Jogadores Conectados:</h3>
+			<ul>
+				<li *ngFor="let player of players">{{player.name}}</li>
+			</ul>
+		</div>
+		<div class="card col-9">
+			<h3 class="card-header">Ações</h3>
+			<ul class="list-group list-group-flush">
+				<li class="list-group-item">Pegar 1 moeda</li>
+				<li class="list-group-item">Pegar 3 moedas</li>
+				<li class="list-group-item">Assassinar</li>
+			</ul>
+		</div>
+	</div>
 
-	<h3>Jogadores Conectados:</h3>
-	<ul>
-		<li *ngFor="let player of players">{{player.name}}</li>
-	</ul>
-	<button>Começar Jogo</button>
+	<div class="row">
+		<div class="col-12">
+			<ul class="d-flex row justify-content-center">
+				<li *ngFor="let card of cards" class="col">
+					<img [ngSrc]="imgUrl + card.image"  alt="{{ card.name }}" width="200" height="333" priority>
+				</li>
+			</ul>
+		</div>
+	</div>
 </div>
