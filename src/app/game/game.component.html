@@ -1,14 +1,18 @@
 <div class="container" style="width: 100vw; height: 100vh;">
+	<div class="col-12">
+		<h3>Jogador atual: {{ currentPlayer?.name }}</h3>
+	</div>
+
 	<div class="row justify-content-start">
-		<div class="col-3">
+		<div class="col-3" *ngFor="let player of players">
 			<h3>Jogadores Conectados:</h3>
-			<ul>
-				<li *ngFor="let player of players">{{player.name}}</li>
-			</ul>
+			<p>{{player.name}}</p>
+			<p>{{player.coins}}</p>
 		</div>
-		<div class="card col-9">
+		<div class="card col-8">
 			<h3 class="card-header">Ações</h3>
 			<ul class="list-group list-group-flush">
+				<button class="btn btn-success" (click)="income()">Renda (Coletar 1 moeda)</button>
 				<li class="list-group-item">Pegar 1 moeda</li>
 				<li class="list-group-item">Pegar 3 moedas</li>
 				<li class="list-group-item">Assassinar</li>
