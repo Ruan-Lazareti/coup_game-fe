@@ -22,6 +22,7 @@ export class GameComponent implements OnInit {
   players: Player[] = [];
   cards: Card[] = [];
   imgUrl: string;
+  currentPlayer: Player | null = null;
 
   constructor(
       private gameService: GameService,
@@ -34,11 +35,19 @@ export class GameComponent implements OnInit {
     this.loadPlayers();
     this.loadPlayerCards();
 
+    this.gameService.listenToTurnChange(this.gameId, (currentPlayer: Player) => {
+      this.updateCurrentPlayer(currentPlayer);
+      this.updatePlayer(currentPlayer);
+    });
+
+    /*this.gameService.listenToPlayerUpdates(this.gameId, (player: Player) => {
+      this.updatePlayer(player);
+    })*/
   }
 
   loadPlayers() {
     this.gameService.getPlayers(this.gameId).subscribe((players: Player[]) => {
-      this.players = players
+      this.players = players;
     });
   }
 
@@ -48,4 +57,20 @@ export class GameComponent implements OnInit {
     })
   }
 
+  updateCurrentPlayer(currentPlayer: Player) {
+    this.currentPlayer = currentPlayer;
+  };
+
+  updatePlayer(player: Player) {
+    const index = this.players.findIndex(p => p.session_id === player.session_id)
+    console.log(index)
+    if (index !== -1) {
+      this.players[index] = player;
+    }
+  }
+
+  //Funções do jogo
+  income() {
+    this.gameService.income(this.gameId).subscribe(() => {})
+  }
 }
