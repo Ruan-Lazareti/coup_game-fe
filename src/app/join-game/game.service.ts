@@ -31,6 +31,8 @@ export class GameService {
       forceTLS: true,
     });
   }
+
+  //Funções para CSRF
   private getCsrfToken(): Observable<void> {
     return this.http.get<void>('http://localhost:8000/sanctum/csrf-cookie', {withCredentials: true});
   }
@@ -47,6 +49,40 @@ export class GameService {
     return { headers };
   }
 
+  //Listeners
+  listenToPlayers(gameId: string | null, onPlayerJoined: (player: Player) => void) {
+    if(gameId) {
+      this.echo.channel(`game.${gameId}`).listen('PlayerJoined', (event: any) => {
+        onPlayerJoined(event.player);
+      })
+    }
+  }
+
+  listenToGameStart(gameId: string | null): void {
+    if(gameId) {
+      this.echo.channel(`game.${gameId}`).listen('GameStarted', () => {
+        this.router.navigate([`/game/play/${gameId}`]);
+      });
+    }
+  }
+
+  listenToTurnChange(gameId: string | null, onTurnChanged: (currentPlayer: Player) => void) {
+    if(gameId) {
+      this.echo.channel(`game.${gameId}`).listen('TurnChanged', (event: any) => {
+        onTurnChanged(event.currentPlayer);
+      });
+    }
+  }
+
+  listenToPlayerUpdates(gameId: string | null, onUpdatePlayer: (updatedPlayer: Player) => void) {
+    this.echo.channel(`game.${gameId}`).listen('PlayerUpdated', (event: any) => {
+      console.log(event.updatedPlayer);
+      onUpdatePlayer(event.updatedPlayer);
+    })
+  }
+
+
+  //Funções de início de jogo
   createGame() {
     return this.http.post(`${this.gameUrl}/create`,'');
   }
@@ -66,21 +102,6 @@ export class GameService {
     return this.http.get<Player[]>(`${this.gameUrl}/players`, {params});
   }
 
-  listenToPlayers(gameId: string | null, onPlayerJoined: (player: Player) => void) {
-    if(gameId) {
-      this.echo.channel(`game.${gameId}`).listen('PlayerJoined', (event: any) => {
-        onPlayerJoined(event.player);
-      })
-    }
-  }
-
-  listenToGameStart(gameId: string | null): void {
-    if(gameId) {
-      this.echo.channel(`game.${gameId}`).listen('GameStarted', () => {
-        this.router.navigate([`/game/play/${gameId}`]);
-      });
-    }
-  }
 
   startGame(gameId: string | null): Observable<any> {
     const body = { game_id: gameId };
@@ -95,4 +116,14 @@ export class GameService {
     return this.http.get<Card[]>(`${this.gameUrl}/player-cards`, {params});
   }
 
+
+  //Funcionalidades do jogo
+  income(game_id: string | null): Observable<Player> {
+    const sessionId = localStorage.getItem('session_id');
+    const params = { game_id: game_id || '',
+      session_id: sessionId || ''
+    };
+
+    return this.http.get<Player>(`${this.gameUrl}/income`, {params});
+  }
 }
