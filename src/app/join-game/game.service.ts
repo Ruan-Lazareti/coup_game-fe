@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable, tap} from 'rxjs';
 import Echo from 'laravel-echo';
+import {environment} from "@environments/environment";
 
 import {Player} from '../models/player.model';
 import {Card} from "../models/card.model";
@@ -12,10 +13,12 @@ import {Router} from "@angular/router";
 })
 
 export class GameService {
-  private cardsUrl = 'http://localhost:8000/api/cards';
-  private gameUrl = 'http://localhost:8000/api/game';
+  private apiUrl: string = environment.apiUrl;
+  public imgUrl: string = environment.imgUrl;
+  private cardsUrl: string = this.apiUrl + '/cards';
+  private gameUrl: string = this.apiUrl + '/game';
   private csrfToken: string | undefined;
-  private echo: Echo;
+  private echo: Echo<any>;
 
   constructor(
       private http: HttpClient,
