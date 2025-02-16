@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Perk } from '../models/perk.model';
+import { Perk } from '../shared/models/perk.model';
 import {environment} from "@environments/environment";
 
 @Injectable({

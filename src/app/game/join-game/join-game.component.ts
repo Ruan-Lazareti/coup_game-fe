@@ -4,7 +4,7 @@ import {FormsModule} from "@angular/forms";
 import {CommonModule} from "@angular/common";
 
 import { GameService } from "./game.service";
-import { Player } from "../models/player.model"
+import { Player } from "../../player/player.model"
 import {start} from "@popperjs/core";
 
 @Component({

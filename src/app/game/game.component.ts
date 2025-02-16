@@ -2,10 +2,10 @@ import {Component, OnInit} from '@angular/core';
 import {NgForOf, NgOptimizedImage} from "@angular/common";
 import {ActivatedRoute} from "@angular/router";
 
-import { GameService } from "../join-game/game.service";
+import { GameService } from "./join-game/game.service";
 import {CardService} from "../card/card.service";
-import { Player } from "../models/player.model";
-import { Card } from "../models/card.model";
+import { Player } from "../player/player.model";
+import { Card } from "../card/card.model";
 
 @Component({
   selector: 'app-game',

@@ -4,8 +4,8 @@ import {Observable, tap} from 'rxjs';
 import Echo from 'laravel-echo';
 import {environment} from "@environments/environment";
 
-import {Player} from '../models/player.model';
-import {Card} from "../models/card.model";
+import {Player} from '../../player/player.model';
+import {Card} from "../../card/card.model";
 import {Router} from "@angular/router";
 
 @Injectable({

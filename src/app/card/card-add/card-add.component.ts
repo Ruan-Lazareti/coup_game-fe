@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
-import { CardService } from '../card/card.service';
-import {PerksService} from "../perk/perks.service";
-import { Card } from '../models/card.model';
-import {Perk} from "../models/perk.model";
+import { CardService } from '../card.service';
+import {PerksService} from "../../services/perks.service";
+import { Card } from '../card.model';
+import {Perk} from "../../shared/models/perk.model";
 import { FormsModule } from '@angular/forms';
 
-import { HomeComponent } from '../home/home.component';
+import { HomeComponent } from '../../home/home.component';
 import {CommonModule} from "@angular/common";
 
 @Component({

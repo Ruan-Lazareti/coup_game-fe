@@ -2,10 +2,10 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, RouterLink, Router} from "@angular/router";
 import {NgForOf, NgOptimizedImage} from "@angular/common";
 
-import {HomeComponent} from "../home/home.component";
-import {Card} from "../models/card.model";
-import {CardService} from "../card/card.service";
-import {Perk} from "../models/perk.model";
+import {HomeComponent} from "../../home/home.component";
+import {Card} from "../card.model";
+import {CardService} from "../card.service";
+import {Perk} from "../../shared/models/perk.model";
 
 @Component({
   selector: 'app-card-edit',
