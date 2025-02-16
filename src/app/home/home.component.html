@@ -1,5 +1,39 @@
 <nav class="nav nav-pills justify-content-center align-" style="width: 70vw">
     <a class="nav-link" routerLink="">Home</a> <!--Quando coloco o RouterLinkAtive aqui ele sempre fica selecionado, mesmo quando não está na pagina -->
-    <button class="nav-link" (click)="createGame()" routerLinkActive="active">Jogar</button>
+    <button class="nav-link" (click)="openModal()" routerLinkActive="active">Jogar</button>
     <a class="nav-link" routerLink="/cards" routerLinkActive="active">Cartas</a>
 </nav>
+
+
+<!-- MODAL PARA INICIAR O JOGO -->
+<div *ngIf="isModalOpen" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4><b>Iniciar Jogo</b></h4>
+      <button (click)="closeModal()">X</button> <!-- Botão para fechar o modal -->
+    </div>
+
+    <div class="modal-body">
+      <div class="modal-left">
+        <!-- Criar Sala -->
+        <h5>Criar um Novo Jogo</h5>
+        <div class="wrapper">
+          <input type="text" [(ngModel)]="nickname" placeholder="Insira seu Nick" />
+          <button (click)="createGame()"><b>Criar Sala</b></button>
+        </div>
+      </div>
+
+      <div class="modal-right">
+        <!-- Entrar em Sala -->
+        <h5>Entre em um Jogo Existente</h5>
+        <div class="wrapper">
+          <div>
+            <input type="text" [(ngModel)]="nickname" placeholder="Insira seu Nick" />
+            <input type="text" [(ngModel)]="gameId" placeholder="Insira o Código do Jogo" />
+          </div>
+          <button class="bt-game" (click)="createGame()"><b>Juntar-se ao Jogo</b></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

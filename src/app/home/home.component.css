@@ -8,3 +8,116 @@ a {
   /*text-decoration: none;*/
   color: black;
 }
+
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.0);
+  z-index: 1000;
+}
+
+.modal-header {
+  justify-content: space-between;
+  align-items: center;
+  background-color: #212529;
+  color: #E9ECEF;
+  padding: 10px;
+}
+
+.modal-header h4 {
+  margin: 0;
+  flex-grow: 1;
+  text-align: center;
+}
+
+.modal-header button {
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.modal-header button:hover {
+  transform: scale(1.2);
+  transition: transform 0.2s ease;
+}
+
+.modal-content {
+  background-color: #212529;
+  color: #E9ECEF;
+  width: 600px;
+  display: flex;
+  justify-content: space-between;
+  border-radius: 8px;
+}
+
+.modal-body {
+  display: flex;
+  gap: 1rem;
+  background-color: #343A40;
+}
+
+/* Divisão esquerda e direita */
+.modal-left, .modal-right {
+  width: 48%;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 90%;
+  justify-content: space-between;
+}
+
+.wrapper button {
+  position: relative;            /* Para posicionar o pseudo-elemento em cima */
+  background-color: #212529;     /* Cor de fundo inicial */
+  margin-top: 30px;
+  overflow: hidden;              /* Garante que o pseudo-elemento não "vaze" */
+  color: white;                  /* Cor do texto */
+  font-size: 16px;               /* Ajuste do tamanho do texto */
+  z-index: 1;                    /* Garante que o texto fique acima do gradiente */
+}
+
+/* O pseudo-elemento, por padrão, fica invisível (opacity: 0) */
+.wrapper button::before {
+  content: "";
+  position: absolute;
+  inset: 0; /* top: 0; right: 0; bottom: 0; left: 0; */
+  background: radial-gradient(circle, rgba(52,58,64,1) 35%, rgba(33,37,41,1) 75%);
+  opacity: 0;
+  transition: opacity 0.4s ease; /* Anima apenas a opacidade */
+  z-index: -1;                   /* Coloca o pseudo-elemento atrás do texto */
+}
+
+/* Ao passar o mouse, aumentamos a opacidade do gradiente para 1 */
+.wrapper button:hover::before {
+  opacity: 1;
+}
+
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  background-color: #495057;
+  color: #E9ECEF;
+  border: 1px solid #495057;
+  border-radius: 10px;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #212529;
+  color: #E9ECEF;
+  font-size: 1.2rem;
+  cursor: pointer;
+  border: 1px solid #212529;
+  border-radius: 5px;
+}

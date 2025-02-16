@@ -28,7 +28,9 @@ export class GameComponent implements OnInit {
       private gameService: GameService,
       private cardService: CardService,
       private route: ActivatedRoute,
-  ) { this.imgUrl = this.cardService.imgUrl; }
+  ) {
+    this.imgUrl = this.cardService.imgUrl;
+  }
 
   ngOnInit() {
     this.gameId = this.route.snapshot.paramMap.get('game_id');
