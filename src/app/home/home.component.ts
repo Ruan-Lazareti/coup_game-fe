@@ -36,10 +36,12 @@ export class HomeComponent {
     this.isModalOpen = false;
   }
 
-  createGame():void {
-    this.gameService.createGame().subscribe((resp) => {
+  createGame(nickname: string):void {
+    this.gameService.createGame(nickname).subscribe((resp) => {
       this.gameId = resp.game_id;
       this.closeModal();
-    })
+
+      this.router.navigate([`/game/join/${this.gameId}`]);
+    });
   }
 }

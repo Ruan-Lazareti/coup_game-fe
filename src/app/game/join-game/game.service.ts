@@ -86,8 +86,8 @@ export class GameService {
 
 
   //Funções de início de jogo
-  createGame(): Observable<any> {
-    return this.http.post(this.gameUrl,'');
+  createGame(nickname: string): Observable<any> {
+    return this.http.post(this.gameUrl, { nickname });
   }
 
   addPlayer(nickname: string, game_id: string | null): Observable<Player> {
