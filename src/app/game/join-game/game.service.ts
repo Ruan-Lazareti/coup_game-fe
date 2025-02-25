@@ -7,6 +7,7 @@ import {environment} from "@environments/environment";
 import {Player} from '../../player/player.model';
 import {Card} from "../../card/card.model";
 import {Router} from "@angular/router";
+import {Game} from "../game.model";
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,7 @@ export class GameService {
   private apiUrl: string = environment.apiUrl;
   public imgUrl: string = environment.imgUrl;
   private cardsUrl: string = this.apiUrl + '/cards';
-  private gameUrl: string = this.apiUrl + '/game';
+  private gameUrl: string = this.apiUrl + '/game/';
   private csrfToken: string | undefined;
   private echo: Echo<any>;
 
@@ -90,7 +91,11 @@ export class GameService {
     return this.http.post(this.gameUrl, { nickname });
   }
 
-  addPlayer(nickname: string, game_id: string | null): Observable<Player> {
+  joinGame(nickname: string, gameId: string): Observable<any> {
+    return this.http.post(this.gameUrl + `join/${gameId}`, { nickname });
+  }
+
+  /*addPlayer(nickname: string, game_id: string | null): Observable<Player> {
     const body = { name: nickname,
                    game_id: game_id};
     return this.http.post<Player>(`${this.gameUrl}/join`, body, this.getHttpOptions()).pipe(
@@ -98,11 +103,10 @@ export class GameService {
           localStorage.setItem('session_id', player.session_id);
         })
     );
-  }
+  }*/
 
-  getPlayers(game_id: string | null): Observable<Player[]> {
-    const params = { game_id: game_id || '' };
-    return this.http.get<Player[]>(`${this.gameUrl}/players`, {params});
+  getGame(game_id: string | null): Observable<Game> {
+    return this.http.get<Game>(this.gameUrl + game_id);
   }
 
 

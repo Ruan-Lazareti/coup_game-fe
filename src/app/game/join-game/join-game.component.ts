@@ -6,6 +6,7 @@ import {CommonModule} from "@angular/common";
 import { GameService } from "./game.service";
 import { Player } from "../../player/player.model"
 import {start} from "@popperjs/core";
+import {Game} from "../game.model";
 
 @Component({
   selector: 'app-join-game',
@@ -19,9 +20,10 @@ import {start} from "@popperjs/core";
 })
 
 export class JoinGameComponent implements OnInit {
-  players: Player[] = [];
-  nickname: string = '';
   gameId: string | null = '';
+  nickname: string = '';
+  players: Player[] = [];
+  gameStatus: string = '';
 
   constructor(
       private gameService: GameService,
@@ -31,7 +33,7 @@ export class JoinGameComponent implements OnInit {
 
   ngOnInit() {
     this.gameId = this.route.snapshot.paramMap.get('game_id');
-    this.loadPlayers();
+    this.getGame();
     this.gameService.listenToGameStart(this.gameId);
 
     if (this.gameId) {
@@ -41,17 +43,18 @@ export class JoinGameComponent implements OnInit {
     }
   }
 
-  loadPlayers() {
-    this.gameService.getPlayers(this.gameId).subscribe((players: Player[]) => {
-      this.players = players
+  getGame() {
+    this.gameService.getGame(this.gameId).subscribe((resp: Game):void => {
+      this.players = resp.players.map((nickname:string) => ({ nickname }))
+      console.log(this.players)
     });
   }
 
-  addPlayer() {
+ /* addPlayer() {
     this.gameService.addPlayer(this.nickname, this.gameId).subscribe((newPlayer: Player) => {
       this.nickname = '';
     });
-  }
+  }*/
 
   startGame() {
     this.gameService.startGame(this.gameId).subscribe(() => {})

@@ -39,7 +39,7 @@ export class GameComponent implements OnInit {
 
     this.gameService.listenToTurnChange(this.gameId, (currentPlayer: Player) => {
       this.updateCurrentPlayer(currentPlayer);
-      this.updatePlayer(currentPlayer);
+      /*this.updatePlayer(currentPlayer);*/
     });
 
     /*this.gameService.listenToPlayerUpdates(this.gameId, (player: Player) => {
@@ -48,9 +48,9 @@ export class GameComponent implements OnInit {
   }
 
   loadPlayers() {
-    this.gameService.getPlayers(this.gameId).subscribe((players: Player[]) => {
+    /*this.gameService.getGame(this.gameId).subscribe((players: Player[]) => {
       this.players = players;
-    });
+    });*/
   }
 
   loadPlayerCards() {
@@ -63,13 +63,13 @@ export class GameComponent implements OnInit {
     this.currentPlayer = currentPlayer;
   };
 
-  updatePlayer(player: Player) {
+  /*updatePlayer(player: Player) {
     const index = this.players.findIndex(p => p.session_id === player.session_id)
     console.log(index)
     if (index !== -1) {
       this.players[index] = player;
     }
-  }
+  }*/
 
   //Funções do jogo
   income() {

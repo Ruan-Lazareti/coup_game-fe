@@ -44,4 +44,13 @@ export class HomeComponent {
       this.router.navigate([`/game/join/${this.gameId}`]);
     });
   }
+
+  joinGame(nickname: string, gameId: string): void
+  {
+    this.gameService.joinGame(nickname, gameId).subscribe((resp:any):void => {
+      this.closeModal()
+
+      this.router.navigate([`/game/join/${this.gameId}`])
+    })
+  }
 }
