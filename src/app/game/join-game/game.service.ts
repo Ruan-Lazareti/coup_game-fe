@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable, tap} from 'rxjs';
 import Echo from 'laravel-echo';
+import Pusher from "pusher-js";
 import {environment} from "@environments/environment";
 
 import {Player} from '../../player/player.model';
@@ -20,6 +21,7 @@ export class GameService {
   private gameUrl: string = this.apiUrl + '/game/';
   private csrfToken: string | undefined;
   private echo: Echo<any>;
+  private pusher: Pusher;
 
   constructor(
       private http: HttpClient,
@@ -28,6 +30,9 @@ export class GameService {
     this.getCsrfToken().subscribe(() => {
       this.csrfToken = this.getCookie('XSRF-TOKEN');
     });
+
+    this.pusher = new Pusher("513fb8d8b51e5195496f", {forceTLS: true, cluster: 'sa1'});
+
     this.echo = new Echo({
       broadcaster: 'pusher',
       key: '513fb8d8b51e5195496f',
@@ -57,7 +62,7 @@ export class GameService {
   listenToPlayers(gameId: string | null, onPlayerJoined: (player: Player) => void) {
     if(gameId) {
       this.echo.channel(`game.${gameId}`).listen('PlayerJoined', (event: any) => {
-        onPlayerJoined(event.player);
+        onPlayerJoined(event);
       })
     }
   }

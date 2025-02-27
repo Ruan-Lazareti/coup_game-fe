@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {FormsModule} from "@angular/forms";
 import {CommonModule} from "@angular/common";
+import Echo from "laravel-echo";
 
 import { GameService } from "./game.service";
 import { Player } from "../../player/player.model"
-import {start} from "@popperjs/core";
 import {Game} from "../game.model";
 
 @Component({
@@ -14,22 +14,21 @@ import {Game} from "../game.model";
   standalone: true,
   imports: [
     FormsModule,
-      CommonModule,
+    CommonModule,
   ],
   styleUrl: './join-game.component.css'
 })
 
 export class JoinGameComponent implements OnInit {
   gameId: string | null = '';
-  nickname: string = '';
   players: Player[] = [];
-  gameStatus: string = '';
+  private echo!: Echo<any>;
 
   constructor(
-      private gameService: GameService,
-      private route: ActivatedRoute,
-      private router: Router,
-  ) {}
+    private gameService: GameService,
+    private route: ActivatedRoute,
+    private router: Router,
+  ) { }
 
   ngOnInit() {
     this.gameId = this.route.snapshot.paramMap.get('game_id');
@@ -44,21 +43,12 @@ export class JoinGameComponent implements OnInit {
   }
 
   getGame() {
-    this.gameService.getGame(this.gameId).subscribe((resp: Game):void => {
-      this.players = resp.players.map((nickname:string) => ({ nickname }))
-      console.log(this.players)
+    this.gameService.getGame(this.gameId).subscribe((resp: Game): void => {
+      this.players = resp.players.map((nickname: string) => ({ nickname }))
     });
   }
-
- /* addPlayer() {
-    this.gameService.addPlayer(this.nickname, this.gameId).subscribe((newPlayer: Player) => {
-      this.nickname = '';
-    });
-  }*/
 
   startGame() {
     this.gameService.startGame(this.gameId).subscribe(() => {})
   }
-
-  protected readonly start = start;
 }
